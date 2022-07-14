@@ -3,6 +3,18 @@ import pg from "pg";
 dotenv.config();
 
 const { Pool } = pg;
-export const connection = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const config = {
+    connectionString: process.env.DATABASE_URL,
+    ssl:null
+}
+
+if(process.env.MODE === "PROD"){
+    config.ssl = {
+        rejectUnauthorized: false
+    }
+}
+
+const db = new Pool(config);
+export default db;
+
+
