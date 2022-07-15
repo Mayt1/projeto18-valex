@@ -8,14 +8,19 @@ export async function createCards(req:Request, res: Response) {
     await cardService.create(apiKey, employeeId, type);
     res.send(201)
 
-
-    
 }
 
+export async function activeCards(req: Request, res: Response) {
+    const {id: cardId} = req.params;
+    const { cvc, password } = req.body
 
+    await cardService.activate(Number(cardId), cvc, password);
+    res.sendStatus(200);
+}
 
-// cardRouter.post("/cards");
-// cardRouter.patch("/cards/:id/activeCards");
-// cardRouter.get("/cards/:id/cardsTransactions");
-// cardRouter.post("/card/:id/lockCard");
-// cardRouter.post("/card/:id/unlockCard");
+export async function transactions(req: Request, res: Response) {
+    const { id: cardId } = req.params;
+    const transactions = await cardService.transactions(Number(cardId));
+
+    res.send(transactions);
+}
